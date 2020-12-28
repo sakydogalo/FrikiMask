@@ -41,10 +41,10 @@ Commands:
 			8 lines = 8 bytes
 				1 line = 8 leds = 8 bits = 1byte
 	5 x 8 bytes
-	2bytes for brightness
-	3bytes for color (RGB)
+	1 byte  for brightness
+	3 bytes for color (RGB)
 
-	Complete mask ocupes 45bytes
+	Complete mask ocupes 44bytes
 
 	mask 0 == position 0  --> first mouth
 		  position 8  --> second mouth
@@ -52,15 +52,15 @@ Commands:
 		  position 24 --> fourth
 		  position 32 --> fifth
 		  position 40 --> brightness
-		  position 42 --> Colour (RGB)
-		     position 42 --> Red
-		     position 43 --> Green
-		     position 44 --> Blue
-	mask 1 == position 45
-	mask 2 == position 90
+		  position 41 --> Colour (RGB)
+		     position 41 --> Red
+		     position 42 --> Green
+		     position 43 --> Blue
+	mask 1 == position 44
+	mask 2 == position 88
 	.
 	.
-	mask 9 == position 405
+	mask 9 == position 396
 
 ## References
 
