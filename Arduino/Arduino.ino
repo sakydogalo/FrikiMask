@@ -35,16 +35,19 @@ void loop() {
 
     float vol = l2r.microphone(A7);
     int vol_leds = map(vol, CORTE, 512, 0, TOPE);
-
-    if(!l2r.listen_command()){
-      if(vol>CORTE){
-        Serial.println(String(vol)+"\t"+String(vol_leds));
-        l2r.display_smile(vol_leds);
-        } else {
-          l2r.off();
-          }
-    }
+	if(l2r.menu==0){ //Only in main menu listen comands via serial port
+		if(!l2r.listen_command()){
+		  if(vol>CORTE){
+			Serial.println(String(vol)+"\t"+String(vol_leds));
+			l2r.display_smile(vol_leds);
+			} else {
+			  l2r.off();
+			  }
+		}
+    }//if l2r.menu==0
     l2r.listen_button();
+    if(l2r.menu==1) l2r.plus_brightness();
+    if(l2r.menu==2) l2r.plus_colour();
 
 }
 

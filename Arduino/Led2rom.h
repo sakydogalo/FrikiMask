@@ -14,7 +14,7 @@
 #define BUF_LEN   20
 #define MAXFLASH   5
 #define MAXEEPROM  5
-#define MAXMENU    3
+#define MAXMENU    4
 
 #include <EEPROM.h>
 #include <FastLED.h>
@@ -30,6 +30,18 @@ class Led2rom
 {
   public:
     configuration _config; //Current configuration
+    //menu and submenu
+    uint8_t menu = 0;
+    uint8_t submenu= 0;
+    //
+    boolean add_brightness = false;
+    boolean stop_brightness = false;
+    uint8_t brightness_tmp = 0;
+    //
+    boolean add_colour = false;
+    boolean stop_colour = false;
+    CRGB colour_tmp = CRGB::Black;
+    //
     Led2rom();
     void init();
     //WRITE TO EEPROM
@@ -47,7 +59,7 @@ class Led2rom
     void display_smile(int vol_leds);
     void black();
     void off();
-    void set_brightness(int brightness);
+    void set_brightness(uint8_t brightness);
     //for serial
     void send_config();
     bool listen_command();
@@ -58,6 +70,8 @@ class Led2rom
     void double_press();
     void togle_mask_ee();
     void togle_mask_flash();
+    void plus_brightness();
+    void plus_colour();
     //for microphone
     float microphone(int pin);
     
@@ -76,9 +90,7 @@ class Led2rom
     boolean longPressActive = false;
     long buttonTimer = 0;
     long longPressTime = 1000;
-    //menu and submenu
-    uint8_t menu = 0;
-    uint8_t submenu= 0;
+
     //
     uint8_t current_i_flash = 0;    //Current index mask from flash
     uint8_t current_i_ee= 0;        //Current index mask from eeprom

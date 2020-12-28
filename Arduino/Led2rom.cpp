@@ -187,7 +187,8 @@ void Led2rom::display_smile(int vol_leds){
 				  if (vol_leds>=20) smile(1);}
   }
 
-void Led2rom::set_brightness(int brightness){
+void Led2rom::set_brightness(uint8_t brightness){
+	//_config.brightness=brightness;
 	FastLED.setBrightness(brightness);
 	}
 
@@ -245,8 +246,8 @@ bool Led2rom::listen_command(){
               //change intensity of LEDs of the current mask
               if (strlen(sdata)>1){
                  val = atoi(&sdata[1]);
-                 _config.brightness=val;
-                 set_brightness(_config.brightness);}
+                 _config.brightness = val;
+                 set_brightness(val);}
               break;
                             
            case 'p':
@@ -335,22 +336,78 @@ void Led2rom::listen_button(){
 void Led2rom::long_press(){
   Serial.println("Long press");
   /*0 main menu
-      1 select masc eeprom
-      2 select masc flash*/
+      * 1 choose britghtness
+      * 2 choose colour
+      * 3 select masc flash
+      * 4
+      * */
   menu +=1;
-  if(menu>=MAXMENU) menu=0;
+  if(menu>=MAXMENU+1) menu=0;
   Serial.println("Menu :"+String(menu));
   //optimizing?
   if(menu==0) Serial.println("Main");
-  if(menu==1) Serial.println("Select mask from eeprom");
-  if(menu==2) Serial.println("Select mask from flash");
-
+  if(menu==1) Serial.println("Choose brightness mask");
+  if(menu==2) Serial.println("Choose  colour mask");
+  if(menu==3) Serial.println("Select mask from eeprom");
+  if(menu==4) Serial.println("Select mask from flash");
+  
 }//long press
 
+void Led2rom::plus_brightness(){
+	if(!stop_brightness){
+		if(!add_brightness ){
+			brightness_tmp += 10;
+			if(brightness_tmp>=250) add_brightness=true;
+			}
+		else {
+			brightness_tmp -= 10;
+			if(brightness_tmp<=0) add_brightness=false;
+			}
+		
+		set_brightness(brightness_tmp);
+		smile(0);
+		Serial.println(brightness_tmp);
+		//delay(100);
+	}
+}
+
+void Led2rom::plus_colour(){
+	
+	if(!stop_colour){
+		if(!add_colour ){
+			//increase colour
+			colour_tmp.r += 25;
+			
+			if(colour_tmp.r>=250){
+				colour_tmp.g += 25;
+				colour_tmp.r = 0;
+				
+				if(colour_tmp.g>=250){
+					colour_tmp.b += 25;
+					colour_tmp.g = 0;
+					
+					if(colour_tmp.b>=250){
+						colour_tmp.b = 0;
+						
+						stop_colour = true;
+						}
+				}
+			}
+		}
+	_config.colour = colour_tmp;
+	smile(0);
+	Serial.println( "(" + String(_config.colour.r) + ", " + String(_config.colour.g) + ", " + String(_config.colour.b) + ")");
+	}
+	
+}
+	
 void Led2rom::short_press(){
   Serial.println("Short press");
-  if(menu==1)   togle_mask_ee();
-  if(menu==2)   togle_mask_flash();
+  if(menu==3)   togle_mask_ee();
+  if(menu==4)   togle_mask_flash();
+  if(menu==1) stop_brightness = !stop_brightness;
+  if(menu==2) stop_colour = !stop_colour;
+  
 }//short press
 
 void Led2rom::double_press(){
