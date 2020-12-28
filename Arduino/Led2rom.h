@@ -6,13 +6,15 @@
 #ifndef Led2rom_h
 #define Led2rom_h
 
-
-#define ROW       8
-#define NLEDS    64 
-#define NPIN      8
-#define BETWEEN  50
-#define SAMPLES 128
-#define BUF_LEN  20
+#define NLEDS     64 
+#define DATAPIN    8
+#define BUTTONPIN  2
+#define BETWEEN   50
+#define SAMPLES  128
+#define BUF_LEN   20
+#define MAXFLASH   5
+#define MAXEEPROM  5
+#define MAXMENU    3
 
 #include <EEPROM.h>
 #include <FastLED.h>
@@ -38,7 +40,7 @@ class Led2rom
     void rst_mask_ee(uint8_t i);
     void factory_ee();
     
-    void copy_mouth(byte mouth[ROW], CRGB color);
+    void copy_mouth(byte mouth[8], CRGB color);//TODO: change by reference
     //for matrix leds
     void talk();
     void smile(int i);
@@ -49,6 +51,13 @@ class Led2rom
     //for serial
     void send_config();
     bool listen_command();
+    //for button
+    void listen_button();
+    void long_press();
+    void short_press();
+    void double_press();
+    void togle_mask_ee();
+    void togle_mask_flash();
     //for microphone
     float microphone(int pin);
     
@@ -56,11 +65,23 @@ class Led2rom
     int _dir;//¿need?
     float vol = 0;
     bool dinamic = false;
+    
   	CRGB _leds[NLEDS] = {    //working leds
   		};
   
       byte _mask[5][8] = {     //Current mask
   		};
+    //
+    boolean buttonActive = false;
+    boolean longPressActive = false;
+    long buttonTimer = 0;
+    long longPressTime = 1000;
+    //menu and submenu
+    uint8_t menu = 0;
+    uint8_t submenu= 0;
+    //
+    uint8_t current_i_flash = 0;    //Current index mask from flash
+    uint8_t current_i_ee= 0;        //Current index mask from eeprom
       
 };//Led2rom
 #endif

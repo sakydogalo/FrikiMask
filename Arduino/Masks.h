@@ -6,7 +6,6 @@
 
 #ifndef Masks_h
 #define Masks_h
-#define MAX_FLASH 5
 
       const PROGMEM byte _mouths[100][5][8]= {//Mouths factory
       {//BOCA1 ORIGINAL 

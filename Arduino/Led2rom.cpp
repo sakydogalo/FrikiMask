@@ -13,13 +13,16 @@ Led2rom::Led2rom()
 
 void Led2rom::init(){
 	//TODO
-	//LOAD CURRENT MASK
-  Serial.begin(9600);                 //Setup serial port 
-  r_mask_flash(4);
-  FastLED.addLeds<WS2812B, NPIN,GRB>(_leds, NLEDS);	//Setup driver matrix leds
+	//LOAD CURRENT MASK AND BRIGHTNESS
+
+ 
+  Serial.begin(9600);                               //Setup serial port 
+  r_mask_flash(4);                                  //TODO: load from eeprom de current mask(eeprom or flash)?
+  FastLED.addLeds<WS2812B, DATAPIN,GRB>(_leds, NLEDS);	//Setup driver matrix leds
   //TODO: DEPEND OF CURRENT MASK
-  FastLED.setBrightness(_config.brightness);      //Adjust brightness
-  //FastLED.setBrightness(20);
+  FastLED.setBrightness(_config.brightness);        //TODO: set brightness from mask loaded previously
+
+  pinMode(2, INPUT_PULLUP);                         //Setup the pinmode for the button
 	}
 
 
@@ -96,7 +99,7 @@ void Led2rom::factory_ee(){
 	}//factory ee
 
 //Copy mouth with color to the led matrix
-void Led2rom::copy_mouth(byte mouth[ROW], CRGB color){
+void Led2rom::copy_mouth(byte mouth[8], CRGB color){
 	//snake-shaped matrix (zig-zag)
 	int k=0;
 	byte row_mouth;
@@ -306,7 +309,72 @@ bool Led2rom::listen_command(){
         return true;
      }
      return false;
-}
+}//listen command
+
+//listen button
+void Led2rom::listen_button(){
+    if (digitalRead(BUTTONPIN) == LOW) {
+      if (buttonActive == false) {
+        buttonActive = true;
+        buttonTimer = millis();}
+      if ((millis() - buttonTimer > longPressTime) && (longPressActive == false)) {
+        longPressActive = true;
+        long_press();}
+    }//digitalRead(BUTTONPIN) == LOW
+    else {
+      if (buttonActive == true) {
+        if (longPressActive == true) {
+          longPressActive = false;}
+        else {
+          short_press();}
+        buttonActive = false;}
+    }
+}//Listen button
+
+//Menu and submenu
+void Led2rom::long_press(){
+  Serial.println("Long press");
+  /*0 main menu
+      1 select masc eeprom
+      2 select masc flash*/
+  menu +=1;
+  if(menu>=MAXMENU) menu=0;
+  Serial.println("Menu :"+String(menu));
+  //optimizing?
+  if(menu==0) Serial.println("Main");
+  if(menu==1) Serial.println("Select mask from eeprom");
+  if(menu==2) Serial.println("Select mask from flash");
+
+}//long press
+
+void Led2rom::short_press(){
+  Serial.println("Short press");
+  if(menu==1)   togle_mask_ee();
+  if(menu==2)   togle_mask_flash();
+}//short press
+
+void Led2rom::double_press(){
+  
+}//double press
+
+void Led2rom::togle_mask_ee(){
+  current_i_ee +=1;
+  if (current_i_ee>=MAXEEPROM) current_i_ee = 0;
+  Serial.println("eeprom :"+ String(current_i_ee));
+  r_mask_ee(current_i_ee);
+  Serial.println("Play mask");
+  talk();
+}//togle mask from eeprom
+
+void Led2rom::togle_mask_flash(){
+  current_i_flash +=1;
+  if (current_i_flash>=MAXFLASH) current_i_flash = 0;
+  Serial.println("flash :"+ String(current_i_flash));
+  r_mask_flash(current_i_flash);
+  Serial.println("Play mask");
+  talk();
+  
+}//togle mask from flash
 
 //Send config
 void Led2rom::send_config(){

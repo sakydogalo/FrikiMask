@@ -44,4 +44,18 @@ void loop() {
           l2r.off();
           }
     }
+    l2r.listen_button();
+
 }
+
+/*test button simple
+  //setup
+  pinMode(2, INPUT_PULLUP); 
+  //int buttonStatus = 0;
+  //loop
+  int pinValue = digitalRead(2);
+  delay(10); // quick and dirty debounce filter
+  if (buttonStatus != pinValue) {
+    buttonStatus = pinValue;
+    Serial.println(buttonStatus);
+  }*/ 
