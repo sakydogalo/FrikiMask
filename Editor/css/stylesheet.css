@@ -1,0 +1,102 @@
+.box {
+    border: 1px dotted grey;
+    font-size: 0;
+}
+
+#palette {
+    width: 50%;
+}
+
+#canvas {
+}
+
+.container-horizontal {
+    display: flex;
+    width: 100%;
+}
+
+.container-vertical {
+    display: block;
+}
+
+
+
+.row {
+
+}
+
+#chosen {
+    border: 1px solid red;
+}
+
+#code {
+    font-family: Consolas, monospace;
+    font-size: 20px;
+}
+
+.x_00 { background-color: #000000}
+.x_FF { background-color: #FFFFFF}
+
+@media screen and (max-width:360px) {
+    /* rules CSS */
+    .color, .cell{
+        height: 30px;
+        width: 30px;
+    }
+}
+
+@media screen and (max-width:640px) and (min-width:360px) {
+    /* rules CSS */
+    .color, .cell{
+        height: 40px;
+        width: 40px;
+    }
+}
+
+@media screen and (max-width:1024px) and (min-width:640px) {
+    /* rules CSS */
+    .color, .cell{
+        height: 60px;
+        width: 60px;
+    }
+
+}
+
+@media screen and (max-width:1324px) and (min-width:1024px) {
+    /* rules CSS */
+    .color, .cell{
+        height: 80px;
+        width: 80px;
+    }
+}
+
+@media screen and (min-width:1324px) {
+    /* rules CSS */
+    .color, .cell{
+        height: 100px;
+        width: 100px;
+    }
+}
+
+.color, .cell {
+
+
+    display: inline-block;
+
+    border: 1px solid #FFFFFF;
+    /*hide the cursor*/
+    font-size: 0px;
+    text-align: center;
+    line-height: 27px; /* Vertical centering of text*/
+}
+
+
+.color {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.cell {
+    border: 1px solid #000000;
+    font-family: Consolas, monospace;
+    
+}

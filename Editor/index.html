@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+	<head>
+		<meta charset="utf-8">
+		<title>Matrix editor Leds</title>
+		<style type="text/css">
+
+		</style>
+		<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/underscore@1.12.0/underscore-min.js"></script>
+		-->
+		<script src="vendor/jquery/jquery.min.js"></script>
+		<script src="vendor/underscore/underscore.min.js"></script>
+		<script src="vendor/tether/tether.min.js"></script>
+		<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+		<!--  -->
+		<link href="css/stylesheet.css" rel="stylesheet">
+		<script src="js/paint.js"></script>
+
+	</head>
+	<body onload="bodyCargado()">
+
+			<h1>Matrix editor leds(8x8)</h1>
+
+			<h2>Arduino Project Mask</h2>
+			
+			<h3><a href="https://github.com/becczor/8-bit-paint" target="_blank">Forked from  becczor /
+				8-bit-paint </a></h3>
+
+			<div class="container-vertical">
+				<div class="box" id="canvas">
+				<!-- Generated divs goes here! -->
+				</div>
+				<br />
+				<button class="btn btn-primary" id="giveCode" onclick="setCode(this)">Generate matrix</button>
+				<br />
+			</div>
+			
+	<div class="box" id="code">
+	<!-- Generated code goes here! -->
+	</div>
+
+	<div id="info">
+	<!-- Div for info -->
+	</div>
+
+	<script>
+		var txt = "<p>Available width/height: " + screen.availWidth + "*" + screen.availHeight + "</p>";
+		document.getElementById("info").innerHTML = txt;
+	</script>
+	</body>
+</html>
