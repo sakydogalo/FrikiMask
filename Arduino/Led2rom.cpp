@@ -338,8 +338,8 @@ void Led2rom::long_press(){
   /*0 main menu
       * 1 choose britghtness
       * 2 choose colour
-      * 3 select masc flash
-      * 4
+      * 3 select masc eeprom
+      * 4 select masc flash
       * */
   menu +=1;
   if(menu>=MAXMENU+1) menu=0;
