@@ -8,7 +8,11 @@
 
 ### Arduino
 
+The core of the FrikiMask arduino
+
 ### Editor
+
+Web interface to edit masks
 
 ## Intructions set of serial port
 Commands:
