@@ -331,7 +331,7 @@ bool Led2rom::listen_command(){
 			  break;
            case 'S':
 		      dinamic=false;
-              break;   
+              break;
            } // switch
            pSdata = sdata;
         } // if \r
@@ -390,70 +390,55 @@ void Led2rom::plus_colour(){
 		
 		switch(rgb_tmp){
 		  case 'r':
-		  if(!add_colour ){
-			if (!colourDelay.isRunning()) rgb_r_tmp += 5;
-				if(rgb_r_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=true;
+		  if(!add_colour_r ){
+			if (!colourDelay_r.isRunning()) rgb_r_tmp += 5;
+				if(rgb_r_tmp>=255 and !colourDelay_r.isRunning()) colourDelay_r.start(1000);
+				if(colourDelay_r.justFinished()) {
+					add_colour_r=true;
+					}
 				}
 			else {
-				if (!colourDelay.isRunning()) rgb_r_tmp -= 5;
-				if(rgb_r_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=false;
+				if (!colourDelay_r.isRunning()) rgb_r_tmp -= 5;
+				if(rgb_r_tmp<=0  and !colourDelay_r.isRunning()) colourDelay_r.start(1000);
+				if(colourDelay_r.justFinished()) {
+					add_colour_r=false;
+					}
 				}
-
-			  /*if(!add_colour ){
-				rgb_r_tmp += 10;
-				if(rgb_r_tmp>=250) add_colour=true;
-				}
-				else {
-				rgb_r_tmp -= 10;
-				if(rgb_r_tmp<=0) add_colour=false;
-				}*/
 			  break;
       
 		  case 'g':
-		  if(!add_colour ){
-			if (!colourDelay.isRunning()) rgb_g_tmp += 5;
-				if(rgb_g_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=true;
+		  if(!add_colour_g ){
+			if (!colourDelay_g.isRunning()) rgb_g_tmp += 5;
+				if(rgb_g_tmp>=255 and !colourDelay_g.isRunning()) colourDelay_g.start(1000);
+				if(colourDelay_g.justFinished()) {
+					add_colour_g=true;
+					}
 				}
 			else {
-				if (!colourDelay.isRunning()) rgb_g_tmp -= 5;
-				if(rgb_g_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=false;
+				if (!colourDelay_g.isRunning()) rgb_g_tmp -= 5;
+				if(rgb_g_tmp<=0  and !colourDelay_g.isRunning()) colourDelay_g.start(1000);
+				if(colourDelay_g.justFinished()) {
+					add_colour_g=false;
+					}
 				}
-			  /*if(!add_colour ){
-				rgb_g_tmp += 10;
-				if(rgb_g_tmp>=250) add_colour=true;
-				}
-				else {
-				rgb_g_tmp -= 10;
-				if(rgb_g_tmp<=0) add_colour=false;
-				}*/
 			  break;
-  		  break;
 
 		  case 'b':
-		  if(!add_colour ){
-			if (!colourDelay.isRunning()) rgb_b_tmp += 5;
-				if(rgb_b_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=true;
+		  if(!add_colour_b ){
+			if (!colourDelay_b.isRunning()) rgb_b_tmp += 5;
+				if(rgb_b_tmp>=255 and !colourDelay_b.isRunning()) colourDelay_b.start(1000);
+				if(colourDelay_b.justFinished()) {
+					add_colour_b=true;
+					}
 				}
 			else {
-				if (!colourDelay.isRunning()) rgb_b_tmp -= 5;
-				if(rgb_b_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
-				if(colourDelay.justFinished()) add_colour=false;
+				if (!colourDelay_b.isRunning()) rgb_b_tmp -= 5;
+				if(rgb_b_tmp<=0  and !colourDelay_b.isRunning()) colourDelay_b.start(1000);
+				if(colourDelay_b.justFinished()) {
+					add_colour_b=false;
+					}
 				}
-			  /*if(!add_colour ){
-				rgb_b_tmp += 10;
-				if(rgb_b_tmp>=250) add_colour=true;
-				}
-				else {
-				rgb_b_tmp -= 10;
-				if(rgb_b_tmp<=0) add_colour=false;
-				}*/
-			  break;
-  		  break;
+			break;
       
 		  }//swhitch
 	//
@@ -477,7 +462,7 @@ void Led2rom::plus_colour(){
 	
 	_config.colour = colour_tmp;
 	FastLED.show();
-	delay(BETWEEN);
+	//delay(BETWEEN);
 	Serial.println( "(" + String(_config.colour.r) + ", " + String(_config.colour.g) + ", " + String(_config.colour.b) + ")");
 	} //if !stop_colour
 	
