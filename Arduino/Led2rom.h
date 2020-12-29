@@ -17,6 +17,7 @@
 
 #include <EEPROM.h>
 #include <FastLED.h>
+#include "millisDelay.h"
 #include "Masks.h"
 
 struct configuration {
@@ -36,10 +37,16 @@ class Led2rom
     boolean add_brightness = false;
     boolean stop_brightness = false;
     uint8_t brightness_tmp = 0;
+    millisDelay brightnessDelay;
     //
     boolean add_colour = false;
     boolean stop_colour = false;
+    uint8_t rgb_r_tmp = 0;
+    uint8_t rgb_g_tmp = 0;
+    uint8_t rgb_b_tmp = 0;
     CRGB colour_tmp = CRGB::Black;
+    char rgb_tmp = 'r';
+    millisDelay colourDelay;
     //
     Led2rom();
     void init();
@@ -52,6 +59,8 @@ class Led2rom
     void factory_ee();
     
     void copy_mouth(byte mouth[8], CRGB color);//TODO: change by reference
+    void draw_colour(byte mouth[8], CRGB color);//TODO: change by reference
+    
     //for matrix leds
     void talk();
     void smile(int i);
@@ -93,6 +102,19 @@ class Led2rom
     //
     uint8_t current_i_flash = 0;    //Current index mask from flash
     uint8_t current_i_ee= 0;        //Current index mask from eeprom
-      
+    byte display_rgb [4][8]{
+			{ 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00000011 ,0b00000011 ,0b00000011 ,0b00000011 },
+			{ 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00011000 ,0b00011000 ,0b00011000 ,0b00011000 },
+			{ 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b11000000 ,0b11000000 ,0b11000000 ,0b11000000 },
+			{ 0b11111111 ,0b11111111 ,0b11111111 ,0b11111111 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 }		
+		};
+
+  /*
+ * 
+* R { 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00000011 ,0b00000011 ,0b00000011 ,0b00000011 }
+* G { 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00011000 ,0b00011000 ,0b00011000 ,0b00011000 }
+* B { 0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 ,0b11000000 ,0b11000000 ,0b11000000 ,0b11000000 }
+* RGB { 0b11111111 ,0b11111111 ,0b11111111 ,0b11111111 ,0b00000000 ,0b00000000 ,0b00000000 ,0b00000000 }
+* */
 };//Led2rom
 #endif
