@@ -1,5 +1,5 @@
 /*
-  Led2rom.h - Library for flashing Morse code.
+  Led2rom.h - Library Library Led2rom.
   Created by sakydogalo@gmail.com, december 2020.
   Released into the public domain.
 */

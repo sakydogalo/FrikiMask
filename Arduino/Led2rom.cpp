@@ -1,5 +1,5 @@
 /*
-  Led2rom.cpp - Library for flashing Morse code.
+  Led2rom.cpp - Library Led2rom.
   Created by sakydogalo@gmail.com, december 2020.
   Released into the public domain.
 */

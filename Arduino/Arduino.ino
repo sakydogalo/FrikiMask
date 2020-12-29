@@ -1,9 +1,13 @@
-
+/*
+  Arduino.ino - 
+  Created by sakydogalo@gmail.com, december 2020.
+  Released into the public domain.
+*/
 
 // TODO
-// chance smile of mask
+// chance smile of mask or complet mask (40 bytes)
 // l[0/1/2/3/4] <-- 8Bytes           
-//
+// After save to eeprom
 // Button functions
 // Double press
 // Choose color rgb
