@@ -3,9 +3,11 @@
 // TODO
 // chance smile of mask
 // l[0/1/2/3/4] <-- 8Bytes           
-// 
+//
+// Button functions
+// Double press
+// Choose color rgb
 // Memorize current mask
-// Add setup times
 // Erase all eeprom
 // Detect initial state, eeprom with out data and fill with mask CON EEPROM VACIA ESCRIBIR MÁSCARAS INICIALES
 // SMILES DINAMIC OR STATIC
