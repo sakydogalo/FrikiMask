@@ -1,5 +1,5 @@
 /*
-  Led2rom.cpp - Library for flashing Morse code.
+  Led2rom.cpp - Library Led2rom.
   Created by sakydogalo@gmail.com, december 2020.
   Released into the public domain.
 */
@@ -137,6 +137,34 @@ void Led2rom::copy_mouth(byte mouth[8], CRGB color){
     //Serial.println();
 	}//for*/
 }//copy_mouth
+
+//Draw with color to the led matrix without black 
+void Led2rom::draw_colour(byte mouth[8], CRGB color){
+	int k=0;
+	byte row_mouth;
+	for(int x=0;x<8;x++){
+		row_mouth = mouth[7-x];					//select the current row
+		for(int y=0;y<8;y++){
+			if (row_mouth & 0b00000001) {
+				if ((x%2)==0){
+					_leds[k]= color;			//----> even row
+          }
+				else{
+					_leds[k+(7-y*2)]= color;	//<---- odd row
+				}
+			} else{
+        if ((x%2)==0){
+          //_leds[k]= CRGB::Black;      //----> even row
+          }
+        else{
+          //_leds[k+(7-y*2)]= CRGB::Black;  //<---- odd row
+        }
+			}
+			k +=1;
+			row_mouth >>= 1;					//shift a bit from the current row
+		}//for
+	}//for
+}//draw_colour
 
 //Talk
 void Led2rom::talk(){
@@ -312,26 +340,6 @@ bool Led2rom::listen_command(){
      return false;
 }//listen command
 
-//listen button
-void Led2rom::listen_button(){
-    if (digitalRead(BUTTONPIN) == LOW) {
-      if (buttonActive == false) {
-        buttonActive = true;
-        buttonTimer = millis();}
-      if ((millis() - buttonTimer > longPressTime) && (longPressActive == false)) {
-        longPressActive = true;
-        long_press();}
-    }//digitalRead(BUTTONPIN) == LOW
-    else {
-      if (buttonActive == true) {
-        if (longPressActive == true) {
-          longPressActive = false;}
-        else {
-          short_press();}
-        buttonActive = false;}
-    }
-}//Listen button
-
 //Menu and submenu
 void Led2rom::long_press(){
   Serial.println("Long press");
@@ -342,7 +350,11 @@ void Led2rom::long_press(){
       * 4 select masc flash
       * */
   menu +=1;
-  if(menu>=MAXMENU+1) menu=0;
+  if(menu>=MAXMENU+1) {
+	  menu=0;
+	  stop_brightness=false;
+	  stop_colour=false;}
+
   Serial.println("Menu :"+String(menu));
   //optimizing?
   if(menu==0) Serial.println("Main");
@@ -356,48 +368,118 @@ void Led2rom::long_press(){
 void Led2rom::plus_brightness(){
 	if(!stop_brightness){
 		if(!add_brightness ){
-			brightness_tmp += 10;
-			if(brightness_tmp>=250) add_brightness=true;
+			if (!brightnessDelay.isRunning()) brightness_tmp += 5;
+			if(brightness_tmp>=255 and !brightnessDelay.isRunning()) brightnessDelay.start(1000);
+			if(brightnessDelay.justFinished()) add_brightness=true;
 			}
 		else {
-			brightness_tmp -= 10;
-			if(brightness_tmp<=0) add_brightness=false;
+			if (!brightnessDelay.isRunning()) brightness_tmp -= 5;
+			if(brightness_tmp<=0  and !brightnessDelay.isRunning()) brightnessDelay.start(1000);
+			if(brightnessDelay.justFinished()) add_brightness=false;
 			}
 		
 		set_brightness(brightness_tmp);
 		smile(0);
 		Serial.println(brightness_tmp);
-		//delay(100);
 	}
 }
 
 void Led2rom::plus_colour(){
 	
 	if(!stop_colour){
-		if(!add_colour ){
-			//increase colour
-			colour_tmp.r += 25;
-			
-			if(colour_tmp.r>=250){
-				colour_tmp.g += 25;
-				colour_tmp.r = 0;
-				
-				if(colour_tmp.g>=250){
-					colour_tmp.b += 25;
-					colour_tmp.g = 0;
-					
-					if(colour_tmp.b>=250){
-						colour_tmp.b = 0;
-						
-						stop_colour = true;
-						}
+		
+		switch(rgb_tmp){
+		  case 'r':
+		  if(!add_colour ){
+			if (!colourDelay.isRunning()) rgb_r_tmp += 5;
+				if(rgb_r_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=true;
 				}
-			}
-		}
+			else {
+				if (!colourDelay.isRunning()) rgb_r_tmp -= 5;
+				if(rgb_r_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=false;
+				}
+
+			  /*if(!add_colour ){
+				rgb_r_tmp += 10;
+				if(rgb_r_tmp>=250) add_colour=true;
+				}
+				else {
+				rgb_r_tmp -= 10;
+				if(rgb_r_tmp<=0) add_colour=false;
+				}*/
+			  break;
+      
+		  case 'g':
+		  if(!add_colour ){
+			if (!colourDelay.isRunning()) rgb_g_tmp += 5;
+				if(rgb_g_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=true;
+				}
+			else {
+				if (!colourDelay.isRunning()) rgb_g_tmp -= 5;
+				if(rgb_g_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=false;
+				}
+			  /*if(!add_colour ){
+				rgb_g_tmp += 10;
+				if(rgb_g_tmp>=250) add_colour=true;
+				}
+				else {
+				rgb_g_tmp -= 10;
+				if(rgb_g_tmp<=0) add_colour=false;
+				}*/
+			  break;
+  		  break;
+
+		  case 'b':
+		  if(!add_colour ){
+			if (!colourDelay.isRunning()) rgb_b_tmp += 5;
+				if(rgb_b_tmp>=255 and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=true;
+				}
+			else {
+				if (!colourDelay.isRunning()) rgb_b_tmp -= 5;
+				if(rgb_b_tmp<=0  and !colourDelay.isRunning()) colourDelay.start(1000);
+				if(colourDelay.justFinished()) add_colour=false;
+				}
+			  /*if(!add_colour ){
+				rgb_b_tmp += 10;
+				if(rgb_b_tmp>=250) add_colour=true;
+				}
+				else {
+				rgb_b_tmp -= 10;
+				if(rgb_b_tmp<=0) add_colour=false;
+				}*/
+			  break;
+  		  break;
+      
+		  }//swhitch
+	//
+	black();
+	colour_tmp = CRGB::Black;
+	colour_tmp.r = rgb_r_tmp;
+	draw_colour(display_rgb [0], colour_tmp);
+	
+	colour_tmp = CRGB::Black;
+	colour_tmp.g = rgb_g_tmp;
+	draw_colour(display_rgb [1], colour_tmp);
+	
+	colour_tmp = CRGB::Black;
+	colour_tmp.b = rgb_b_tmp;
+	draw_colour(display_rgb [2], colour_tmp);
+
+	colour_tmp.r = rgb_r_tmp;
+	colour_tmp.g = rgb_g_tmp;
+	colour_tmp.b = rgb_b_tmp;
+	draw_colour(display_rgb [3], colour_tmp);
+	
 	_config.colour = colour_tmp;
-	smile(0);
+	FastLED.show();
+	delay(BETWEEN);
 	Serial.println( "(" + String(_config.colour.r) + ", " + String(_config.colour.g) + ", " + String(_config.colour.b) + ")");
-	}
+	} //if !stop_colour
 	
 }
 	
@@ -411,7 +493,27 @@ void Led2rom::short_press(){
 }//short press
 
 void Led2rom::double_press(){
-  
+  Serial.println("Double press");
+  if(menu==2) {
+	  switch(rgb_tmp){
+		  case 'r':
+  			Serial.println("Change to Green");
+  			rgb_tmp = 'g';
+  		  break;
+      
+		  case 'g':
+  			rgb_tmp = 'b';
+  			Serial.println("Change to Blue");
+  		  break;
+
+      case 'b':
+  			rgb_tmp = 'r';
+  			Serial.println("Change to Red");
+  		  break;
+      
+		  }//swhitch
+	  }//if menu==2
+	  
 }//double press
 
 void Led2rom::togle_mask_ee(){
