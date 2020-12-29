@@ -8,7 +8,6 @@
 
 #define NLEDS     64 
 #define DATAPIN    8
-#define BUTTONPIN  2
 #define BETWEEN   50
 #define SAMPLES  128
 #define BUF_LEN   20
@@ -64,7 +63,7 @@ class Led2rom
     void send_config();
     bool listen_command();
     //for button
-    void listen_button();
+    // void listen_button()
     void long_press();
     void short_press();
     void double_press();

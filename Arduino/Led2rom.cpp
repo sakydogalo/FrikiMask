@@ -312,26 +312,6 @@ bool Led2rom::listen_command(){
      return false;
 }//listen command
 
-//listen button
-void Led2rom::listen_button(){
-    if (digitalRead(BUTTONPIN) == LOW) {
-      if (buttonActive == false) {
-        buttonActive = true;
-        buttonTimer = millis();}
-      if ((millis() - buttonTimer > longPressTime) && (longPressActive == false)) {
-        longPressActive = true;
-        long_press();}
-    }//digitalRead(BUTTONPIN) == LOW
-    else {
-      if (buttonActive == true) {
-        if (longPressActive == true) {
-          longPressActive = false;}
-        else {
-          short_press();}
-        buttonActive = false;}
-    }
-}//Listen button
-
 //Menu and submenu
 void Led2rom::long_press(){
   Serial.println("Long press");
@@ -411,7 +391,7 @@ void Led2rom::short_press(){
 }//short press
 
 void Led2rom::double_press(){
-  
+  Serial.println("Double press");
 }//double press
 
 void Led2rom::togle_mask_ee(){

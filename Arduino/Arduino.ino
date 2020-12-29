@@ -19,26 +19,44 @@
 // Other modes
 
 //LIBRARIES
+#include <OneButton.h>
 #include "Led2rom.h"
 
 //CONSTANTS
 #define CORTE 300
 #define TOPE 100
+#define BUTTONPIN  2
 
 //OBJECTS AND VARIABLES
+OneButton button(BUTTONPIN, true);
 Led2rom l2r;
 
 //FUNCTIONS
+void shortPress(){
+  //Serial.println("Short press");
+  l2r.short_press();
+  }
+void doublePress(){
+  //Serial.println("Double press");
+  l2r.double_press();
+  }
+void longPress(){
+  //Serial.println("Long press");
+  l2r.long_press();
+  }
 
 //SETUP
 void setup() {
-    l2r.init();
-    l2r.send_config();
+	button.attachClick(shortPress);
+	button.attachDoubleClick(doublePress);
+	button.attachLongPressStart(longPress);
+  l2r.init();
+  l2r.send_config();
 }
 
 //LOOP
 void loop() {
-
+	button.tick();
     float vol = l2r.microphone(A7);
     int vol_leds = map(vol, CORTE, 512, 0, TOPE);
 	if(l2r.menu==0){ //Only in main menu listen comands via serial port
@@ -51,7 +69,8 @@ void loop() {
 			  }
 		}
     }//if l2r.menu==0
-    l2r.listen_button();
+    //l2r.listen_button();
+    
     if(l2r.menu==1) l2r.plus_brightness();
     if(l2r.menu==2) l2r.plus_colour();
 
